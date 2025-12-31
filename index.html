@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CalmaSphere | Zenith-Cervical Therapist</title>
+    <link rel="icon" href="https://i.ibb.co/MyMf3nj6/Black-and-White-Minimalist-Professional-Initial-Logo-20251231-162001-0000.png" type="image/png">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        brand: { 50: '#fff7ed', 100: '#ffedd5', 500: '#f97316', 600: '#ea580c', 900: '#1a1a1a' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html { scroll-behavior: smooth; }
+        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .hide-scroll::-webkit-scrollbar { display: none; }
+        .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+        .modal-open { overflow: hidden; }
+        .loader { border: 3px solid #f3f3f3; border-top: 3px solid #ea580c; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; display: none; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="bg-[#F8F9FA] text-slate-800 antialiased selection:bg-brand-100 selection:text-brand-900 relative">
+
+    <!-- COOKIE BANNER -->
+    <div id="cookie-banner" class="fixed bottom-0 left-0 w-full bg-white border-t border-slate-200 shadow-[0_-5px_20px_rgba(0,0,0,0.1)] z-[60] p-4 md:p-6 flex flex-col md:flex-row justify-between items-center gap-4 transition-transform duration-500 translate-y-full">
+        <div class="text-sm text-slate-600 max-w-2xl">
+            <span class="font-bold text-slate-900">Wir nutzen Cookies.</span> 
+            Um dir das bestmögliche Shopping-Erlebnis zu bieten, nutzen wir Technologien zur Funktionsverbesserung und Analyse. 
+            <button onclick="openLegal('privacy')" class="underline text-brand-600 hover:text-brand-700">Datenschutzerklärung</button>.
+        </div>
+        <div class="flex gap-3 w-full md:w-auto">
+            <button onclick="acceptCookies()" class="flex-1 md:flex-none bg-slate-200 text-slate-800 px-6 py-2.5 rounded-xl font-bold text-sm hover:bg-slate-300 transition">Ablehnen</button>
+            <button onclick="acceptCookies()" class="flex-1 md:flex-none bg-brand-600 text-white px-6 py-2.5 rounded-xl font-bold text-sm hover:bg-brand-700 transition shadow-lg shadow-brand-500/30">Akzeptieren</button>
+        </div>
+    </div>
+
+    <!-- RECHTS-MODALS -->
+    <div id="modal-impressum" class="fixed inset-0 z-[100] bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4" onclick="closeLegal('impressum')">
+        <div class="bg-white w-full max-w-2xl max-h-[80vh] overflow-y-auto rounded-3xl p-8 shadow-2xl relative" onclick="event.stopPropagation()">
+            <button onclick="closeLegal('impressum')" class="absolute top-4 right-4 bg-slate-100 p-2 rounded-full hover:bg-slate-200">✕</button>
+            <h2 class="text-2xl font-bold mb-4">Impressum</h2>
+            <div class="space-y-4 text-sm text-slate-600">
+                <p><strong>Angaben gemäß § 5 TMG / Schweizer Recht:</strong></p>
+                <p>CalmaSphere Schweiz GmbH<br>Musterstrasse 12<br>8001 Zürich<br>Schweiz</p>
+                <p><strong>Kontakt:</strong><br>E-Mail: support@calmasphere.ch</p>
+            </div>
+        </div>
+    </div>
+    
+    <div id="modal-agb" class="fixed inset-0 z-[100] bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4" onclick="closeLegal('agb')">
+        <div class="bg-white w-full max-w-2xl max-h-[80vh] overflow-y-auto rounded-3xl p-8 shadow-2xl relative" onclick="event.stopPropagation()">
+            <button onclick="closeLegal('agb')" class="absolute top-4 right-4 bg-slate-100 p-2 rounded-full hover:bg-slate-200">✕</button>
+            <h2 class="text-2xl font-bold mb-4">AGB</h2>
+            <div class="space-y-4 text-sm text-slate-600"><p>Allgemeine Geschäftsbedingungen hier einfügen.</p></div>
+        </div>
+    </div>
+
+    <div id="modal-privacy" class="fixed inset-0 z-[100] bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4" onclick="closeLegal('privacy')">
+        <div class="bg-white w-full max-w-2xl max-h-[80vh] overflow-y-auto rounded-3xl p-8 shadow-2xl relative" onclick="event.stopPropagation()">
+            <button onclick="closeLegal('privacy')" class="absolute top-4 right-4 bg-slate-100 p-2 rounded-full hover:bg-slate-200">✕</button>
+            <h2 class="text-2xl font-bold mb-4">Datenschutz</h2>
+            <div class="space-y-4 text-sm text-slate-600"><p>Datenschutzerklärung hier einfügen.</p></div>
+        </div>
+    </div>
+
+    <!-- VIDEO MODAL -->
+    <div id="videoModal" class="fixed inset-0 z-[100] bg-slate-900/90 backdrop-blur-sm hidden items-center justify-center p-4 transition-all duration-300" onclick="closeVideo(event)">
+        <div class="relative w-full max-w-5xl bg-black rounded-3xl overflow-hidden shadow-2xl ring-1 ring-white/10" onclick="event.stopPropagation()">
+            <button onclick="closeVideo()" class="absolute top-4 right-4 z-20 bg-black/50 hover:bg-brand-600 text-white p-2 rounded-full backdrop-blur-md transition-all">✕</button>
+            <video id="featureVideo" controls class="w-full h-auto max-h-[80vh] object-contain bg-black">
+                <source src="https://video.aliexpress-media.com/play/u/ae_sg_item/3000925203489/p/1/e/6/t/10301/5000408830858.mp4?from=firefox&definition=h265" type="video/mp4">
+            </video>
+        </div>
+    </div>
+
+    <!-- NAVBAR -->
+    <div class="bg-brand-900 text-white text-xs font-medium text-center py-2 tracking-wide">🇨🇭 Kostenloser Priority-Versand ab CHF 100.–</div>
+    <nav class="sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-slate-100 transition-all duration-300">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="flex items-center gap-3">
+                <img src="https://i.ibb.co/MyMf3nj6/Black-and-White-Minimalist-Professional-Initial-Logo-20251231-162001-0000.png" alt="CalmaSphere Logo" class="h-12 w-auto object-contain">
+                <span class="font-bold text-xl tracking-tight text-slate-900">CalmaSphere</span>
+            </a>
+            <div class="hidden md:flex gap-8 text-sm font-medium text-slate-500">
+                <a href="#features" class="hover:text-brand-600 transition">Vorteile</a>
+                <a href="#reviews" class="hover:text-brand-600 transition">Bewertungen</a>
+                <a href="#faq" class="hover:text-brand-600 transition">FAQ</a>
+            </div>
+            <a href="#offer" class="bg-slate-900 text-white px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-brand-600 hover:shadow-lg transition-all transform active:scale-95">Angebot wählen</a>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="relative pt-12 pb-20 md:pt-24 md:pb-32 overflow-hidden">
+        <div class="container mx-auto px-6 flex flex-col md:flex-row items-center gap-12 lg:gap-20">
+            <div class="md:w-1/2 z-10 fade-in">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-50 border border-orange-100 text-orange-600 text-xs font-bold uppercase tracking-wider mb-6">
+                    <span class="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span> Bestseller 2025
+                </div>
+                <h1 class="text-5xl md:text-7xl font-extrabold text-slate-900 leading-[1.1] mb-6 tracking-tight">Der Zenith-Cervical <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-red-600 text-4xl md:text-5xl block mt-2">Multi-Körper Therapist.</span></h1>
+                <p class="text-lg md:text-xl text-slate-500 mb-8 leading-relaxed max-w-lg">
+                    Entdecken Sie das ganzheitliche Wohlbefinden mit der CalmaSphere Zenith-Cervical. Dieses fortschrittliche Gerät kombiniert eine ikonische, ergonomische Ästhetik mit therapeutischer Präzision. Seine einzigartige Form wurde entwickelt, um eine tiefgreifende, pulsierende Massage am gesamten Körper zu liefern.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 mb-10">
+                    <a href="#offer" class="bg-brand-600 text-white px-8 py-4 rounded-2xl font-bold text-lg shadow-xl shadow-brand-500/20 hover:bg-brand-700 transition-all hover:-translate-y-1 text-center">Rabatt sichern (-33%)</a>
+                    <button onclick="openVideo()" class="px-8 py-4 rounded-2xl border border-slate-200 bg-white font-semibold text-slate-700 hover:bg-slate-50 hover:text-brand-600 hover:border-brand-200 transition text-center flex items-center justify-center gap-2 group">
+                        <div class="w-8 h-8 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center group-hover:scale-110 transition"><svg class="w-4 h-4 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div> Funktionen ansehen
+                    </button>
+                </div>
+                <div class="flex items-center gap-4 text-sm font-medium text-slate-500">
+                    <div class="flex text-yellow-400 text-sm">★★★★★</div> <span class="opacity-80">1.200+ Schweizer Kunden</span>
+                </div>
+            </div>
+            <div class="md:w-1/2 relative z-0 flex justify-center">
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gradient-to-tr from-orange-200/40 to-pink-100/40 blur-3xl rounded-full"></div>
+                <img src="https://ae01.alicdn.com/kf/Sbc3a89d8b47c41098152e8b7eaf18d93o.jpg" class="relative rounded-[2.5rem] shadow-2xl w-full max-w-md object-cover border-8 border-white/50 transform rotate-2 hover:rotate-0 transition duration-700 ease-out cursor-pointer" onclick="openVideo()">
+                <div onclick="openVideo()" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-20 h-20 bg-white/30 backdrop-blur-md rounded-full flex items-center justify-center cursor-pointer hover:scale-110 transition duration-300 border border-white/50 shadow-xl group">
+                    <svg class="w-8 h-8 text-white fill-white group-hover:text-brand-500 transition" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TRUST ELEMENTS -->
+    <div class="border-y border-slate-100 bg-white py-10">
+        <div class="container mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center text-slate-400 grayscale opacity-70 font-semibold text-lg">
+            <div>🛡️ 2 Jahre Garantie</div><div>🚚 PostPac Priority</div><div>💰 Kauf auf Rechnung</div><div>🇨🇭 Schweizer Support</div>
+        </div>
+    </div>
+
+    <!-- FEATURES -->
+    <section id="features" class="py-24 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center max-w-2xl mx-auto mb-20">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Warum jeder darüber spricht</h2>
+                <p class="text-slate-500 text-lg">Keine Vibration. Echte Bewegung.</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-slate-50 rounded-3xl p-8 hover:shadow-xl hover:-translate-y-2 transition duration-300 border border-slate-100">
+                    <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-3xl shadow-sm mb-6">👐</div>
+                    <h3 class="text-xl font-bold mb-3 text-slate-900">4D Grifft-Technik</h3>
+                    <p class="text-slate-600 leading-relaxed">6 Massageköpfe arbeiten asynchron zusammen. Greift tief in den Muskel.</p>
+                </div>
+                <div class="bg-slate-50 rounded-3xl p-8 hover:shadow-xl hover:-translate-y-2 transition duration-300 border border-slate-100">
+                    <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-3xl shadow-sm mb-6">🔥</div>
+                    <h3 class="text-xl font-bold mb-3 text-slate-900">Smart Heat™</h3>
+                    <p class="text-slate-600 leading-relaxed">Konstante 45°C Wärme lockert das Fasziengewebe.</p>
+                </div>
+                <div class="bg-slate-50 rounded-3xl p-8 hover:shadow-xl hover:-translate-y-2 transition duration-300 border border-slate-100">
+                    <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-3xl shadow-sm mb-6">🔋</div>
+                    <h3 class="text-xl font-bold mb-3 text-slate-900">7 Tage Akku</h3>
+                    <p class="text-slate-600 leading-relaxed">Komplett kabellos nutzbar.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- REVIEWS SECTION (UPDATED WITH IMAGES) -->
+    <section id="reviews" class="py-24 bg-[#F8F9FA] relative overflow-hidden">
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="flex justify-between items-end mb-12">
+                <div>
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-2">Das sagen unsere Kunden</h2>
+                    <p class="text-slate-500">Basierend auf 1.240+ verifizierten Bewertungen.</p>
+                </div>
+                <div class="hidden md:block text-yellow-500 text-2xl tracking-widest">★★★★★</div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Review 1 (Text) -->
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 flex flex-col h-full">
+                    <div class="flex items-center gap-1 text-yellow-400 mb-4 text-sm">★★★★★</div>
+                    <h4 class="font-bold text-lg mb-2">"Endlich schmerzfrei im Büro"</h4>
+                    <p class="text-slate-600 text-sm leading-relaxed mb-6 flex-grow">
+                        "Ich sitze 9 Stunden am PC und mein Nacken war steinhart. Das Gerät knetet wirklich richtig zu, nicht nur so ein leichtes Vibrieren. Die Wärmefunktion ist im Winter ein Traum."
+                    </p>
+                    <div class="flex items-center gap-3 mt-auto">
+                        <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-gray-500 font-bold text-xs">SB</div>
+                        <div>
+                            <div class="text-sm font-bold text-slate-900">Sarah B.</div>
+                            <div class="text-xs text-green-600 flex items-center gap-1">✓ Verifizierter Kauf</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review 2 (Photo) -->
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 flex flex-col h-full">
+                    <div class="flex items-center gap-1 text-yellow-400 mb-3 text-sm">★★★★★</div>
+                    <div class="mb-4 overflow-hidden rounded-xl h-48 w-full relative">
+                        <img src="https://ae-pic-a1.aliexpress-media.com/kf/A6fb7978735cc4ddbbfde218845f25a67i.jpg_960x960q75.jpg_.avif" class="absolute inset-0 w-full h-full object-cover transform hover:scale-105 transition duration-500">
+                    </div>
+                    <h4 class="font-bold text-lg mb-2">"Sitzt perfekt"</h4>
+                    <p class="text-slate-600 text-sm leading-relaxed mb-4 flex-grow">
+                        "Ich habe schon viele Geräte probiert, aber das hier sitzt durch das Gewicht und die Form perfekt auf den Schultern. Ich nutze es jeden Abend beim Fernsehen."
+                    </p>
+                    <div class="flex items-center gap-3 mt-auto">
+                        <div class="w-10 h-10 bg-brand-100 text-brand-600 rounded-full flex items-center justify-center font-bold text-xs">MK</div>
+                        <div>
+                            <div class="text-sm font-bold text-slate-900">Michael K.</div>
+                            <div class="text-xs text-green-600 flex items-center gap-1">✓ Verifizierter Kauf</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review 3 (Text) -->
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 flex flex-col h-full">
+                    <div class="flex items-center gap-1 text-yellow-400 mb-4 text-sm">★★★★★</div>
+                    <h4 class="font-bold text-lg mb-2">"Das Bundle lohnt sich"</h4>
+                    <p class="text-slate-600 text-sm leading-relaxed mb-6 flex-grow">
+                        "Kauf 2 krieg 1 gratis hat mich überzeugt. Wir nutzen es jetzt in der ganzen Familie. Der Akku hält ewig. Absolute Kaufempfehlung für den Preis."
+                    </p>
+                    <div class="flex items-center gap-3 mt-auto">
+                        <div class="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center text-orange-600 font-bold text-xs">JL</div>
+                        <div>
+                            <div class="text-sm font-bold text-slate-900">Julia L.</div>
+                            <div class="text-xs text-green-600 flex items-center gap-1">✓ Verifizierter Kauf</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review 4 (Photo) -->
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 flex flex-col h-full">
+                    <div class="flex items-center gap-1 text-yellow-400 mb-3 text-sm">★★★★★</div>
+                    <div class="mb-4 overflow-hidden rounded-xl h-48 w-full relative">
+                        <img src="https://ae-pic-a1.aliexpress-media.com/kf/Ac517ff13ed2647c6a3228acdc318f47aN.jpg_960x960q75.jpg_.avif" class="absolute inset-0 w-full h-full object-cover transform hover:scale-105 transition duration-500">
+                    </div>
+                    <h4 class="font-bold text-lg mb-2">"Hochwertig verpackt"</h4>
+                    <p class="text-slate-600 text-sm leading-relaxed mb-4 flex-grow">
+                        "Kam super schnell an (2 Tage in die Schweiz). Die Verpackung wirkt edel, eignet sich also super als Geschenk. Das Material fühlt sich sehr weich an."
+                    </p>
+                    <div class="flex items-center gap-3 mt-auto">
+                        <div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center font-bold text-xs">EM</div>
+                        <div>
+                            <div class="text-sm font-bold text-slate-900">Elena M.</div>
+                            <div class="text-xs text-green-600 flex items-center gap-1">✓ Verifizierter Kauf</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review 5 (Text) -->
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 flex flex-col h-full">
+                    <div class="flex items-center gap-1 text-yellow-400 mb-4 text-sm">★★★★★</div>
+                    <h4 class="font-bold text-lg mb-2">"Besser als erwartet"</h4>
+                    <p class="text-slate-600 text-sm leading-relaxed mb-6 flex-grow">
+                        "Habe das 3er Bundle bestellt. Die Lieferung war schnell da. Die Qualität ist top, der Stoff fühlt sich sehr hochwertig an und lässt sich gut reinigen."
+                    </p>
+                    <div class="flex items-center gap-3 mt-auto">
+                        <img src="https://randomuser.me/api/portraits/men/46.jpg" class="w-10 h-10 rounded-full">
+                        <div>
+                            <div class="text-sm font-bold text-slate-900">Markus Weber</div>
+                            <div class="text-xs text-green-600 flex items-center gap-1">✓ Verifizierter Kauf</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review 6 (Photo) -->
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 flex flex-col h-full">
+                    <div class="flex items-center gap-1 text-yellow-400 mb-3 text-sm">★★★★★</div>
+                    <div class="mb-4 overflow-hidden rounded-xl h-48 w-full relative">
+                        <img src="https://ae-pic-a1.aliexpress-media.com/kf/A28e19f62b35548aa925de643ec7ce019w.jpg_960x960q75.jpg_.avif" class="absolute inset-0 w-full h-full object-cover transform hover:scale-105 transition duration-500">
+                    </div>
+                    <h4 class="font-bold text-lg mb-2">"Tiefenwirkung pur"</h4>
+                    <p class="text-slate-600 text-sm leading-relaxed mb-4 flex-grow">
+                        "Man sieht hier gut die Massageköpfe. Die greifen richtig tief in den Muskel, fast wie echte Finger. Nach 10 Minuten fühle ich mich wie neu geboren."
+                    </p>
+                    <div class="flex items-center gap-3 mt-auto">
+                        <div class="w-10 h-10 bg-green-100 text-green-600 rounded-full flex items-center justify-center font-bold text-xs">TH</div>
+                        <div>
+                            <div class="text-sm font-bold text-slate-900">Thomas H.</div>
+                            <div class="text-xs text-green-600 flex items-center gap-1">✓ Verifizierter Kauf</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- OFFER SECTION -->
+    <section id="offer" class="py-24 bg-white border-t border-slate-100 scroll-mt-20">
+        <div class="container mx-auto px-4 max-w-7xl">
+            <div class="grid lg:grid-cols-12 gap-12 items-start">
+                
+                <!-- Left Column: Gallery -->
+                <div class="lg:col-span-7 sticky top-32">
+                    <div class="bg-slate-50 rounded-[2rem] p-8 mb-6 relative border border-slate-100 overflow-hidden">
+                        <div id="imageBadge" class="absolute top-6 left-6 bg-brand-600 text-white px-4 py-1.5 rounded-full text-sm font-bold shadow-lg z-10 transition-all">Spar-Paket</div>
+                        <img id="mainImage" src="https://ae01.alicdn.com/kf/S44459bebbd32434b865592583b388926N.jpg" class="w-full h-[450px] object-contain mix-blend-multiply fade-in transition-all duration-300">
+                    </div>
+                    <div class="flex gap-4 overflow-x-auto hide-scroll pb-2">
+                        <button onclick="changeImage('https://ae01.alicdn.com/kf/S44459bebbd32434b865592583b388926N.jpg')" class="w-20 h-20 rounded-xl border border-slate-200 hover:border-brand-500 bg-white p-1 transition flex-shrink-0"><img src="https://ae01.alicdn.com/kf/S44459bebbd32434b865592583b388926N.jpg" class="w-full h-full object-cover rounded-lg"></button>
+                        <button onclick="changeImage('https://ae01.alicdn.com/kf/Sbc3a89d8b47c41098152e8b7eaf18d93o.jpg')" class="w-20 h-20 rounded-xl border border-slate-200 hover:border-brand-500 bg-white p-1 transition flex-shrink-0"><img src="https://ae01.alicdn.com/kf/Sbc3a89d8b47c41098152e8b7eaf18d93o.jpg" class="w-full h-full object-cover rounded-lg"></button>
+                        <button onclick="changeImage('https://ae01.alicdn.com/kf/S16970ff9da2c48d3887da005026e7225G.jpg')" class="w-20 h-20 rounded-xl border border-slate-200 hover:border-brand-500 bg-white p-1 transition flex-shrink-0"><img src="https://ae01.alicdn.com/kf/S16970ff9da2c48d3887da005026e7225G.jpg" class="w-full h-full object-cover rounded-lg"></button>
+                    </div>
+                </div>
+
+                <!-- Right Column: Checkout -->
+                <div class="lg:col-span-5">
+                    <div class="bg-white rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100 p-6 md:p-8 relative overflow-hidden">
+                        
+                        <div class="mb-6 border-b border-slate-100 pb-6">
+                            <div class="flex justify-between items-start mb-2">
+                                <h2 class="text-2xl font-bold text-slate-900">Der Zenith-Cervical</h2>
+                                <div class="bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded">Auf Lager</div>
+                            </div>
+                            <div class="flex items-center gap-2 text-sm text-slate-500"><span class="text-yellow-500 font-bold text-base">★★★★★</span><span class="underline decoration-slate-300">1.240 Bewertungen</span></div>
+                        </div>
+
+                        <div class="space-y-4 mb-8">
+                            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Wähle dein Paket</p>
+
+                            <!-- Option BUNDLE -->
+                            <div id="opt-bundle" onclick="selectOffer('bundle')" class="relative cursor-pointer group rounded-xl border-2 border-brand-500 bg-orange-50/30 p-4 transition-all duration-200 shadow-md">
+                                <div class="absolute -top-3 right-4 bg-gradient-to-r from-brand-600 to-red-500 text-white text-[10px] uppercase font-bold px-3 py-1 rounded-full shadow-sm z-10">Meistgekauft</div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-5 h-5 rounded-full border border-brand-500 bg-brand-500 flex items-center justify-center transition-colors"><div class="w-2 h-2 bg-white rounded-full"></div></div>
+                                        <div><div class="font-bold text-slate-900">3er Familien-Set</div><div class="text-xs text-brand-600 font-semibold">Kauf 2 + 1 GRATIS dazu!</div></div>
+                                    </div>
+                                    <div class="text-right"><div class="font-bold text-lg text-slate-900">CHF 159.80</div><div class="text-xs text-slate-400 line-through">CHF 239.70</div></div>
+                                </div>
+                            </div>
+
+                            <!-- Option SINGLE -->
+                            <div id="opt-single" onclick="selectOffer('single')" class="relative cursor-pointer group rounded-xl border border-slate-200 bg-white p-4 transition-all duration-200 hover:border-slate-400">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-5 h-5 rounded-full border border-slate-300 bg-white flex items-center justify-center transition-colors group-hover:border-slate-400"><div class="w-2 h-2 bg-transparent rounded-full transition-colors"></div></div>
+                                        <div><div class="font-bold text-slate-900">1 Stück</div><div class="text-xs text-slate-500">Starter Paket</div></div>
+                                    </div>
+                                    <div class="text-right"><div class="font-bold text-lg text-slate-900">CHF 79.90</div></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-50 rounded-xl p-5 mb-6 border border-slate-100">
+                            <div class="flex justify-between items-center mb-2 text-sm"><span class="text-slate-500">Versand (Priority)</span><span id="shippingPrice" class="font-bold text-green-600">KOSTENLOS</span></div>
+                            <div class="h-px bg-slate-200 my-3"></div>
+                            <div class="flex justify-between items-center"><span class="text-slate-900 font-bold">Gesamtsumme</span><span id="totalPrice" class="text-2xl font-extrabold text-slate-900">CHF 159.80</span></div>
+                            <div id="savingsText" class="mt-3 bg-red-50 border border-red-100 text-red-600 text-center text-xs font-bold py-2 rounded-lg flex justify-center items-center gap-2">Du sparst heute CHF 79.90!</div>
+                        </div>
+
+                        <!-- CHECKOUT BUTTON -->
+                        <button onclick="handleCheckout()" id="checkout-btn" class="w-full bg-slate-900 text-white py-4 rounded-xl font-bold text-lg hover:bg-brand-600 hover:shadow-lg transition-all duration-200 transform active:scale-[0.98] flex items-center justify-center gap-2 mb-4">
+                            <span id="btn-text">Zur Kasse gehen</span>
+                            <div id="btn-loader" class="loader"></div>
+                            <svg id="btn-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </button>
+                        
+                        <div class="flex justify-center items-center gap-4 text-[10px] text-slate-400 uppercase tracking-wide font-medium">
+                            <span class="flex items-center gap-1">🔒 SSL-Secure</span> • <span>Stripe Payments</span> • <span>30 Tage Garantie</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="py-24 bg-[#F8F9FA]">
+        <div class="container mx-auto px-6 max-w-3xl">
+            <h2 class="text-3xl font-bold text-slate-900 text-center mb-16">Häufig gestellte Fragen</h2>
+            <div class="space-y-4">
+                <details class="group bg-white rounded-2xl p-6 shadow-sm cursor-pointer border border-transparent hover:border-slate-200 transition" open>
+                    <summary class="flex justify-between items-center font-bold text-slate-900 text-lg">Ist das Gerät schwer auf den Schultern? <span class="text-slate-400 transform group-open:rotate-180 transition">▼</span></summary>
+                    <p class="text-slate-600 mt-4 leading-relaxed">Nein, überhaupt nicht. Der Zenith-Cervical wiegt nur <strong>0,76 kg (760g)</strong>. Er wurde ergonomisch so ausbalanciert, dass er angenehm aufliegt.</p>
+                </details>
+                <details class="group bg-white rounded-2xl p-6 shadow-sm cursor-pointer border border-transparent hover:border-slate-200 transition">
+                    <summary class="flex justify-between items-center font-bold text-slate-900 text-lg">Kann ich die Intensität einstellen? <span class="text-slate-400 transform group-open:rotate-180 transition">▼</span></summary>
+                    <p class="text-slate-600 mt-4 leading-relaxed">Ja, du hast die volle Kontrolle. Wähle aus <strong>3 Massage-Stärken</strong> und schalte bei Bedarf eine der <strong>2 Wärmestufen</strong> hinzu.</p>
+                </details>
+                <details class="group bg-white rounded-2xl p-6 shadow-sm cursor-pointer border border-transparent hover:border-slate-200 transition">
+                    <summary class="flex justify-between items-center font-bold text-slate-900 text-lg">Wie lange hält der Akku? <span class="text-slate-400 transform group-open:rotate-180 transition">▼</span></summary>
+                    <p class="text-slate-600 mt-4 leading-relaxed">Verbaut ist ein leistungsstarker <strong>2000mAh Akku</strong>. Eine Anwendung dauert intelligent getimt <strong>10 Minuten</strong>.</p>
+                </details>
+                <details class="group bg-white rounded-2xl p-6 shadow-sm cursor-pointer border border-transparent hover:border-slate-200 transition">
+                    <summary class="flex justify-between items-center font-bold text-slate-900 text-lg">Ist der Bezug waschbar? <span class="text-slate-400 transform group-open:rotate-180 transition">▼</span></summary>
+                    <p class="text-slate-600 mt-4 leading-relaxed">Ja! Der Bereich, der auf der Haut aufliegt, verfügt über einen Reißverschluss. Du kannst den Bezug einfach abnehmen und waschen.</p>
+                </details>
+                <details class="group bg-white rounded-2xl p-6 shadow-sm cursor-pointer border border-transparent hover:border-slate-200 transition">
+                    <summary class="flex justify-between items-center font-bold text-slate-900 text-lg">Wie lange dauert der Versand? <span class="text-slate-400 transform group-open:rotate-180 transition">▼</span></summary>
+                    <p class="text-slate-600 mt-4 leading-relaxed">Wir versenden per PostPac Priority. Deine Bestellung ist in der Regel innerhalb von 2-3 Werktagen bei dir.</p>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 text-slate-400 py-16 border-t border-slate-800">
+        <div class="container mx-auto px-6 grid md:grid-cols-4 gap-12">
+            <div class="col-span-1 md:col-span-2">
+                <div class="text-white font-bold text-2xl mb-4">CalmaSphere</div>
+                <p class="max-w-xs text-sm leading-relaxed opacity-70">Schweizer Qualität für dein Wohlbefinden.</p>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-4">Rechtliches</h4>
+                <ul class="space-y-2 text-sm cursor-pointer">
+                    <li><a onclick="openLegal('impressum')" class="hover:text-white transition">Impressum</a></li>
+                    <li><a onclick="openLegal('privacy')" class="hover:text-white transition">Datenschutz</a></li>
+                    <li><a onclick="openLegal('agb')" class="hover:text-white transition">AGB</a></li>
+                </ul>
+            </div>
+            <div><h4 class="text-white font-bold mb-4">Kontakt</h4><ul class="space-y-2 text-sm"><li>support@calmasphere.ch</li><li>Zürich, Schweiz</li></ul></div>
+        </div>
+        <div class="border-t border-slate-800 pt-8 text-center text-xs opacity-50 mt-12">&copy; 2025 CalmaSphere Schweiz.</div>
+    </footer>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        // ==========================================
+        // KONFIGURATION: STRIPE LINKS
+        // ==========================================
+        
+        const LINK_SINGLE_PRODUCT = 'https://buy.stripe.com/3cI6oHgHvcpd7gqf90dZ600';
+        const LINK_BUNDLE_PRODUCT = 'https://buy.stripe.com/8x214n9f30GvcAK1iadZ601';
+
+        // ==========================================
+
+        let currentOfferType = 'bundle';
+
+        function handleCheckout() {
+            const btnText = document.getElementById('btn-text');
+            const btnLoader = document.getElementById('btn-loader');
+            const btnIcon = document.getElementById('btn-icon');
+
+            btnText.innerText = 'Leite weiter...';
+            btnLoader.style.display = 'block';
+            btnIcon.style.display = 'none';
+
+            setTimeout(() => {
+                if (currentOfferType === 'bundle') {
+                    window.location.href = LINK_BUNDLE_PRODUCT;
+                } else {
+                    window.location.href = LINK_SINGLE_PRODUCT;
+                }
+            }, 800);
+        }
+
+        // --- OFFER LOGIC ---
+        const prices = {
+            single: { subtotal: 79.90, shipping: 4.90, total: 84.80, savings: 0 },
+            bundle: { subtotal: 159.80, shipping: 0, total: 159.80, savings: 79.90 }
+        };
+
+        const bundleImgURL = 'https://ae01.alicdn.com/kf/S44459bebbd32434b865592583b388926N.jpg';
+        const singleImgURL = 'https://ae01.alicdn.com/kf/Sbc3a89d8b47c41098152e8b7eaf18d93o.jpg';
+
+        function changeImage(src) {
+            const mainImg = document.getElementById('mainImage');
+            mainImg.style.opacity = '0';
+            setTimeout(() => {
+                mainImg.src = src;
+                mainImg.style.opacity = '1';
+            }, 200);
+        }
+
+        function selectOffer(type) {
+            currentOfferType = type;
+            const optBundle = document.getElementById('opt-bundle');
+            const optSingle = document.getElementById('opt-single');
+            const shippingEl = document.getElementById('shippingPrice');
+            const totalEl = document.getElementById('totalPrice');
+            const savingsEl = document.getElementById('savingsText');
+            const badge = document.getElementById('imageBadge');
+
+            if (type === 'bundle') {
+                changeImage(bundleImgURL);
+                optBundle.className = "relative cursor-pointer group rounded-xl border-2 border-brand-500 bg-orange-50/30 p-4 transition-all duration-200 shadow-md";
+                optBundle.querySelector('.w-5').className = "w-5 h-5 rounded-full border border-brand-500 bg-brand-500 flex items-center justify-center transition-colors";
+                optBundle.querySelector('.w-2').className = "w-2 h-2 bg-white rounded-full";
+                
+                optSingle.className = "relative cursor-pointer group rounded-xl border border-slate-200 bg-white p-4 transition-all duration-200 hover:border-slate-400 opacity-70";
+                optSingle.querySelector('.w-5').className = "w-5 h-5 rounded-full border border-slate-300 bg-white flex items-center justify-center transition-colors";
+                optSingle.querySelector('.w-2').className = "w-2 h-2 bg-transparent rounded-full";
+
+                shippingEl.innerText = "KOSTENLOS";
+                shippingEl.className = "font-bold text-green-600";
+                totalEl.innerText = "CHF " + prices.bundle.total.toFixed(2);
+                savingsEl.style.display = "flex";
+                savingsEl.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"></path></svg> Du sparst heute CHF ${prices.bundle.savings.toFixed(2)}!`;
+                badge.innerText = "Spar-Paket";
+                badge.className = "absolute top-6 left-6 bg-brand-600 text-white px-4 py-1.5 rounded-full text-sm font-bold shadow-lg z-10 transition-all";
+            } else {
+                changeImage(singleImgURL);
+                optSingle.className = "relative cursor-pointer group rounded-xl border-2 border-brand-500 bg-white p-4 transition-all duration-200 shadow-md";
+                optSingle.querySelector('.w-5').className = "w-5 h-5 rounded-full border border-brand-500 bg-brand-500 flex items-center justify-center transition-colors";
+                optSingle.querySelector('.w-2').className = "w-2 h-2 bg-white rounded-full";
+
+                optBundle.className = "relative cursor-pointer group rounded-xl border border-slate-200 bg-white p-4 transition-all duration-200 hover:border-slate-400 opacity-70";
+                optBundle.querySelector('.w-5').className = "w-5 h-5 rounded-full border border-slate-300 bg-white flex items-center justify-center transition-colors";
+                optBundle.querySelector('.w-2').className = "w-2 h-2 bg-transparent rounded-full";
+
+                shippingEl.innerText = "CHF " + prices.single.shipping.toFixed(2);
+                shippingEl.className = "font-bold text-slate-900";
+                totalEl.innerText = "CHF " + prices.single.total.toFixed(2);
+                savingsEl.style.display = "none";
+                badge.innerText = "Standard";
+                badge.className = "absolute top-6 left-6 bg-slate-800 text-white px-4 py-1.5 rounded-full text-sm font-bold shadow-lg z-10 transition-all";
+            }
+        }
+
+        // --- LEGAL MODALS ---
+        function openLegal(id) { document.getElementById('modal-'+id).classList.remove('hidden'); document.getElementById('modal-'+id).classList.add('flex'); document.body.classList.add('modal-open'); }
+        function closeLegal(id) { document.getElementById('modal-'+id).classList.add('hidden'); document.getElementById('modal-'+id).classList.remove('flex'); document.body.classList.remove('modal-open'); }
+        
+        // --- VIDEO & COOKIES ---
+        window.addEventListener('load', () => setTimeout(() => document.getElementById('cookie-banner').classList.remove('translate-y-full'), 1000));
+        function acceptCookies() { document.getElementById('cookie-banner').classList.add('translate-y-full'); }
+        function openVideo() { document.getElementById('videoModal').classList.remove('hidden'); document.getElementById('videoModal').classList.add('flex'); setTimeout(()=>document.getElementById('videoModal').classList.add('opacity-100'),10); document.getElementById('featureVideo').play().catch(()=>{}); }
+        function closeVideo() { document.getElementById('videoModal').classList.remove('opacity-100'); setTimeout(()=>{document.getElementById('videoModal').classList.add('hidden');document.getElementById('videoModal').classList.remove('flex');document.getElementById('featureVideo').pause();},300); }
+    </script>
+</body>
+</html>
