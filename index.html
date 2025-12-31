@@ -30,24 +30,31 @@
         .loader { border: 3px solid #f3f3f3; border-top: 3px solid #ea580c; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; display: none; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
-</head>
-<!-- TikTok Pixel Code Start -->
-<script>
-!function (w, d, t) {
-  w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(
-var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script")
-;n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
+
+    <script>
+        // TikTok Pixel Load Funktion
+        function loadTikTokPixel() {
+            // Verhindert mehrfaches Laden
+            if (window.tiktokPixelLoaded) return;
+            window.tiktokPixelLoaded = true;
+            
+            console.log('TikTok Pixel wird geladen...');
+
+            !function (w, d, t) {
+                w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(
+                var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script")
+                ;n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
 
 
-  ttq.load('D5AN4FRC77U9GK0PL5C0');
-  ttq.page();
-}(window, document, 'ttq');
-</script>
-<!-- TikTok Pixel Code End -->
+                ttq.load('D5AN4FRC77U9GK0PL5C0');
+                ttq.page();
+            }(window, document, 'ttq');
+        }
+    </script>
+    </head>
     
 <body class="bg-[#F8F9FA] text-slate-800 antialiased selection:bg-brand-100 selection:text-brand-900 relative">
 
-    <!-- COOKIE BANNER -->
     <div id="cookie-banner" class="fixed bottom-0 left-0 w-full bg-white border-t border-slate-200 shadow-[0_-5px_20px_rgba(0,0,0,0.1)] z-[60] p-4 md:p-6 flex flex-col md:flex-row justify-between items-center gap-4 transition-transform duration-500 translate-y-full">
         <div class="text-sm text-slate-600 max-w-2xl">
             <span class="font-bold text-slate-900">Wir nutzen Cookies.</span> 
@@ -55,12 +62,11 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
             <button onclick="openLegal('privacy')" class="underline text-brand-600 hover:text-brand-700">Datenschutzerklärung</button>.
         </div>
         <div class="flex gap-3 w-full md:w-auto">
-            <button onclick="acceptCookies()" class="flex-1 md:flex-none bg-slate-200 text-slate-800 px-6 py-2.5 rounded-xl font-bold text-sm hover:bg-slate-300 transition">Ablehnen</button>
+            <button onclick="declineCookies()" class="flex-1 md:flex-none bg-slate-200 text-slate-800 px-6 py-2.5 rounded-xl font-bold text-sm hover:bg-slate-300 transition">Ablehnen</button>
             <button onclick="acceptCookies()" class="flex-1 md:flex-none bg-brand-600 text-white px-6 py-2.5 rounded-xl font-bold text-sm hover:bg-brand-700 transition shadow-lg shadow-brand-500/30">Akzeptieren</button>
         </div>
     </div>
 
-    <!-- RECHTS-MODALS -->
     <div id="modal-impressum" class="fixed inset-0 z-[100] bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4" onclick="closeLegal('impressum')">
         <div class="bg-white w-full max-w-2xl max-h-[80vh] overflow-y-auto rounded-3xl p-8 shadow-2xl relative" onclick="event.stopPropagation()">
             <button onclick="closeLegal('impressum')" class="absolute top-4 right-4 bg-slate-100 p-2 rounded-full hover:bg-slate-200">✕</button>
@@ -142,7 +148,6 @@ Sie haben jederzeit das Recht auf unentgeltliche Auskunft über Ihre gespeichert
         </div>
     </div>
 
-    <!-- VIDEO MODAL -->
     <div id="videoModal" class="fixed inset-0 z-[100] bg-slate-900/90 backdrop-blur-sm hidden items-center justify-center p-4 transition-all duration-300" onclick="closeVideo(event)">
         <div class="relative w-full max-w-5xl bg-black rounded-3xl overflow-hidden shadow-2xl ring-1 ring-white/10" onclick="event.stopPropagation()">
             <button onclick="closeVideo()" class="absolute top-4 right-4 z-20 bg-black/50 hover:bg-brand-600 text-white p-2 rounded-full backdrop-blur-md transition-all">✕</button>
@@ -152,7 +157,6 @@ Sie haben jederzeit das Recht auf unentgeltliche Auskunft über Ihre gespeichert
         </div>
     </div>
 
-    <!-- NAVBAR -->
     <div class="bg-brand-900 text-white text-xs font-medium text-center py-2 tracking-wide">🇨🇭 Kostenloser Priority-Versand ab CHF 100.–</div>
     <nav class="sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-slate-100 transition-all duration-300">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
@@ -169,7 +173,6 @@ Sie haben jederzeit das Recht auf unentgeltliche Auskunft über Ihre gespeichert
         </div>
     </nav>
 
-    <!-- HERO SECTION -->
     <section class="relative pt-12 pb-20 md:pt-24 md:pb-32 overflow-hidden">
         <div class="container mx-auto px-6 flex flex-col md:flex-row items-center gap-12 lg:gap-20">
             <div class="md:w-1/2 z-10 fade-in">
@@ -200,14 +203,12 @@ Sie haben jederzeit das Recht auf unentgeltliche Auskunft über Ihre gespeichert
         </div>
     </section>
 
-    <!-- TRUST ELEMENTS -->
     <div class="border-y border-slate-100 bg-white py-10">
         <div class="container mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center text-slate-400 grayscale opacity-70 font-semibold text-lg">
             <div>🛡️ 2 Jahre Garantie</div><div>🚚 PostPac Priority</div><div>💰 Kauf auf Rechnung</div><div>🇨🇭 Schweizer Support</div>
         </div>
     </div>
 
-    <!-- FEATURES -->
     <section id="features" class="py-24 bg-white">
         <div class="container mx-auto px-6">
             <div class="text-center max-w-2xl mx-auto mb-20">
@@ -234,7 +235,6 @@ Sie haben jederzeit das Recht auf unentgeltliche Auskunft über Ihre gespeichert
         </div>
     </section>
 
-    <!-- REVIEWS SECTION (UPDATED WITH IMAGES) -->
     <section id="reviews" class="py-24 bg-[#F8F9FA] relative overflow-hidden">
         <div class="container mx-auto px-6 relative z-10">
             <div class="flex justify-between items-end mb-12">
@@ -246,7 +246,6 @@ Sie haben jederzeit das Recht auf unentgeltliche Auskunft über Ihre gespeichert
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Review 1 (Text) -->
                 <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 flex flex-col h-full">
                     <div class="flex items-center gap-1 text-yellow-400 mb-4 text-sm">★★★★★</div>
                     <h4 class="font-bold text-lg mb-2">"Endlich schmerzfrei im Büro"</h4>
@@ -262,7 +261,6 @@ Sie haben jederzeit das Recht auf unentgeltliche Auskunft über Ihre gespeichert
                     </div>
                 </div>
 
-                <!-- Review 2 (Photo) -->
                 <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 flex flex-col h-full">
                     <div class="flex items-center gap-1 text-yellow-400 mb-3 text-sm">★★★★★</div>
                     <div class="mb-4 overflow-hidden rounded-xl h-48 w-full relative">
@@ -281,7 +279,6 @@ Sie haben jederzeit das Recht auf unentgeltliche Auskunft über Ihre gespeichert
                     </div>
                 </div>
 
-                <!-- Review 3 (Text) -->
                 <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 flex flex-col h-full">
                     <div class="flex items-center gap-1 text-yellow-400 mb-4 text-sm">★★★★★</div>
                     <h4 class="font-bold text-lg mb-2">"Das Bundle lohnt sich"</h4>
@@ -297,7 +294,6 @@ Sie haben jederzeit das Recht auf unentgeltliche Auskunft über Ihre gespeichert
                     </div>
                 </div>
 
-                <!-- Review 4 (Photo) -->
                 <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 flex flex-col h-full">
                     <div class="flex items-center gap-1 text-yellow-400 mb-3 text-sm">★★★★★</div>
                     <div class="mb-4 overflow-hidden rounded-xl h-48 w-full relative">
@@ -316,7 +312,6 @@ Sie haben jederzeit das Recht auf unentgeltliche Auskunft über Ihre gespeichert
                     </div>
                 </div>
 
-                <!-- Review 5 (Text) -->
                 <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 flex flex-col h-full">
                     <div class="flex items-center gap-1 text-yellow-400 mb-4 text-sm">★★★★★</div>
                     <h4 class="font-bold text-lg mb-2">"Besser als erwartet"</h4>
@@ -332,7 +327,6 @@ Sie haben jederzeit das Recht auf unentgeltliche Auskunft über Ihre gespeichert
                     </div>
                 </div>
 
-                <!-- Review 6 (Photo) -->
                 <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 flex flex-col h-full">
                     <div class="flex items-center gap-1 text-yellow-400 mb-3 text-sm">★★★★★</div>
                     <div class="mb-4 overflow-hidden rounded-xl h-48 w-full relative">
@@ -355,12 +349,10 @@ Sie haben jederzeit das Recht auf unentgeltliche Auskunft über Ihre gespeichert
         </div>
     </section>
 
-    <!-- OFFER SECTION -->
     <section id="offer" class="py-24 bg-white border-t border-slate-100 scroll-mt-20">
         <div class="container mx-auto px-4 max-w-7xl">
             <div class="grid lg:grid-cols-12 gap-12 items-start">
                 
-                <!-- Left Column: Gallery -->
                 <div class="lg:col-span-7 sticky top-32">
                     <div class="bg-slate-50 rounded-[2rem] p-8 mb-6 relative border border-slate-100 overflow-hidden">
                         <div id="imageBadge" class="absolute top-6 left-6 bg-brand-600 text-white px-4 py-1.5 rounded-full text-sm font-bold shadow-lg z-10 transition-all">Spar-Paket</div>
@@ -373,7 +365,6 @@ Sie haben jederzeit das Recht auf unentgeltliche Auskunft über Ihre gespeichert
                     </div>
                 </div>
 
-                <!-- Right Column: Checkout -->
                 <div class="lg:col-span-5">
                     <div class="bg-white rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100 p-6 md:p-8 relative overflow-hidden">
                         
@@ -388,7 +379,6 @@ Sie haben jederzeit das Recht auf unentgeltliche Auskunft über Ihre gespeichert
                         <div class="space-y-4 mb-8">
                             <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Wähle dein Paket</p>
 
-                            <!-- Option BUNDLE -->
                             <div id="opt-bundle" onclick="selectOffer('bundle')" class="relative cursor-pointer group rounded-xl border-2 border-brand-500 bg-orange-50/30 p-4 transition-all duration-200 shadow-md">
                                 <div class="absolute -top-3 right-4 bg-gradient-to-r from-brand-600 to-red-500 text-white text-[10px] uppercase font-bold px-3 py-1 rounded-full shadow-sm z-10">Meistgekauft</div>
                                 <div class="flex items-center justify-between">
@@ -400,11 +390,10 @@ Sie haben jederzeit das Recht auf unentgeltliche Auskunft über Ihre gespeichert
                                 </div>
                             </div>
 
-                            <!-- Option SINGLE -->
                             <div id="opt-single" onclick="selectOffer('single')" class="relative cursor-pointer group rounded-xl border border-slate-200 bg-white p-4 transition-all duration-200 hover:border-slate-400">
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center gap-3">
-                                        <div class="w-5 h-5 rounded-full border border-slate-300 bg-white flex items-center justify-center transition-colors group-hover:border-slate-400"><div class="w-2 h-2 bg-transparent rounded-full transition-colors"></div></div>
+                                        <div class="w-5 h-5 rounded-full border border-slate-300 bg-white flex items-center justify-center transition-colors group-hover:border-slate-400"><div class="w-2 h-2 bg-transparent rounded-full"></div></div>
                                         <div><div class="font-bold text-slate-900">1 Stück</div><div class="text-xs text-slate-500">Starter Paket</div></div>
                                     </div>
                                     <div class="text-right"><div class="font-bold text-lg text-slate-900">CHF 79.90</div></div>
@@ -419,7 +408,6 @@ Sie haben jederzeit das Recht auf unentgeltliche Auskunft über Ihre gespeichert
                             <div id="savingsText" class="mt-3 bg-red-50 border border-red-100 text-red-600 text-center text-xs font-bold py-2 rounded-lg flex justify-center items-center gap-2">Du sparst heute CHF 79.90!</div>
                         </div>
 
-                        <!-- CHECKOUT BUTTON -->
                         <button onclick="handleCheckout()" id="checkout-btn" class="w-full bg-slate-900 text-white py-4 rounded-xl font-bold text-lg hover:bg-brand-600 hover:shadow-lg transition-all duration-200 transform active:scale-[0.98] flex items-center justify-center gap-2 mb-4">
                             <span id="btn-text">Zur Kasse gehen</span>
                             <div id="btn-loader" class="loader"></div>
@@ -435,7 +423,6 @@ Sie haben jederzeit das Recht auf unentgeltliche Auskunft über Ihre gespeichert
         </div>
     </section>
 
-    <!-- FAQ -->
     <section id="faq" class="py-24 bg-[#F8F9FA]">
         <div class="container mx-auto px-6 max-w-3xl">
             <h2 class="text-3xl font-bold text-slate-900 text-center mb-16">Häufig gestellte Fragen</h2>
@@ -464,7 +451,6 @@ Sie haben jederzeit das Recht auf unentgeltliche Auskunft über Ihre gespeichert
         </div>
     </section>
 
-    <!-- FOOTER -->
     <footer class="bg-slate-900 text-slate-400 py-16 border-t border-slate-800">
         <div class="container mx-auto px-6 grid md:grid-cols-4 gap-12">
             <div class="col-span-1 md:col-span-2">
@@ -484,7 +470,6 @@ Sie haben jederzeit das Recht auf unentgeltliche Auskunft über Ihre gespeichert
         <div class="border-t border-slate-800 pt-8 text-center text-xs opacity-50 mt-12">&copy; 2025 CalmaSphere Schweiz.</div>
     </footer>
 
-    <!-- JAVASCRIPT -->
     <script>
         // ==========================================
         // KONFIGURATION: STRIPE LINKS
@@ -498,6 +483,23 @@ Sie haben jederzeit das Recht auf unentgeltliche Auskunft über Ihre gespeichert
         let currentOfferType = 'bundle';
 
         function handleCheckout() {
+            // ************ TIKTOK EVENT: InitiateCheckout ************
+            // Sendet Event, wenn der Nutzer zur Kasse geht (nur wenn Pixel geladen)
+            if (window.ttq && localStorage.getItem('cookieConsent') === 'granted') {
+                const contentId = currentOfferType === 'bundle' ? '3er-Familien-Set' : '1-Stück-Starter';
+                const value = currentOfferType === 'bundle' ? 159.80 : 79.90; 
+
+                window.ttq.track('InitiateCheckout', {
+                    content_type: 'product',
+                    content_id: contentId,
+                    value: value,
+                    currency: 'CHF'
+                });
+                console.log('TikTok Event: InitiateCheckout getrackt.');
+            }
+            // ********************************************************
+
+
             const btnText = document.getElementById('btn-text');
             const btnLoader = document.getElementById('btn-loader');
             const btnIcon = document.getElementById('btn-icon');
@@ -543,6 +545,18 @@ Sie haben jederzeit das Recht auf unentgeltliche Auskunft über Ihre gespeichert
             const badge = document.getElementById('imageBadge');
 
             if (type === 'bundle') {
+                // ************ TIKTOK EVENT: ViewContent (Bundle ausgewählt) ************
+                if (window.ttq && localStorage.getItem('cookieConsent') === 'granted') {
+                     window.ttq.track('ViewContent', {
+                        content_type: 'product_group',
+                        content_id: 'bundle-3er-familien-set',
+                        value: 159.80,
+                        currency: 'CHF'
+                    });
+                     console.log('TikTok Event: ViewContent (Bundle) getrackt.');
+                }
+                // **********************************************************************
+
                 changeImage(bundleImgURL);
                 optBundle.className = "relative cursor-pointer group rounded-xl border-2 border-brand-500 bg-orange-50/30 p-4 transition-all duration-200 shadow-md";
                 optBundle.querySelector('.w-5').className = "w-5 h-5 rounded-full border border-brand-500 bg-brand-500 flex items-center justify-center transition-colors";
@@ -560,6 +574,18 @@ Sie haben jederzeit das Recht auf unentgeltliche Auskunft über Ihre gespeichert
                 badge.innerText = "Spar-Paket";
                 badge.className = "absolute top-6 left-6 bg-brand-600 text-white px-4 py-1.5 rounded-full text-sm font-bold shadow-lg z-10 transition-all";
             } else {
+                 // ************ TIKTOK EVENT: ViewContent (Einzelstück ausgewählt) ************
+                if (window.ttq && localStorage.getItem('cookieConsent') === 'granted') {
+                     window.ttq.track('ViewContent', {
+                        content_type: 'product',
+                        content_id: 'einzel-1-stueck',
+                        value: 79.90,
+                        currency: 'CHF'
+                    });
+                    console.log('TikTok Event: ViewContent (Einzelstück) getrackt.');
+                }
+                // **********************************************************************
+                
                 changeImage(singleImgURL);
                 optSingle.className = "relative cursor-pointer group rounded-xl border-2 border-brand-500 bg-white p-4 transition-all duration-200 shadow-md";
                 optSingle.querySelector('.w-5').className = "w-5 h-5 rounded-full border border-brand-500 bg-brand-500 flex items-center justify-center transition-colors";
@@ -582,9 +608,61 @@ Sie haben jederzeit das Recht auf unentgeltliche Auskunft über Ihre gespeichert
         function openLegal(id) { document.getElementById('modal-'+id).classList.remove('hidden'); document.getElementById('modal-'+id).classList.add('flex'); document.body.classList.add('modal-open'); }
         function closeLegal(id) { document.getElementById('modal-'+id).classList.add('hidden'); document.getElementById('modal-'+id).classList.remove('flex'); document.body.classList.remove('modal-open'); }
         
-        // --- VIDEO & COOKIES ---
-        window.addEventListener('load', () => setTimeout(() => document.getElementById('cookie-banner').classList.remove('translate-y-full'), 1000));
-        function acceptCookies() { document.getElementById('cookie-banner').classList.add('translate-y-full'); }
+        // =======================================================
+        // COOKIE / PIXEL ZUSTIMMUNGS-LOGIK
+        // =======================================================
+        
+        /**
+         * FUNKTION: Wird beim Klicken auf "Akzeptieren" im Banner aufgerufen.
+         */
+        function acceptCookies() {
+            // 1. Speichere die Zustimmung
+            localStorage.setItem('cookieConsent', 'granted');
+            
+            // 2. Lade den TikTok Pixel (enthält ttq.load und ttq.page)
+            if (typeof loadTikTokPixel === 'function') {
+                loadTikTokPixel();
+            }
+
+            // 3. Blende das Banner aus
+            document.getElementById('cookie-banner').classList.add('translate-y-full');
+        }
+
+        /**
+         * FUNKTION: Wird beim Klicken auf "Ablehnen" im Banner aufgerufen.
+         */
+         function declineCookies() {
+            // 1. Blende das Banner aus
+            document.getElementById('cookie-banner').classList.add('translate-y-full');
+            // 2. Das TikTok Pixel wird NICHT geladen.
+        }
+
+
+        // --- INITIIERUNG BEIM LADEN DER SEITE ---
+        window.addEventListener('load', () => {
+            const hasConsent = localStorage.getItem('cookieConsent') === 'granted';
+            const banner = document.getElementById('cookie-banner');
+            
+            if (hasConsent) {
+                // Wenn bereits zugestimmt, lade das Pixel sofort und zeige das Banner nicht.
+                if (typeof loadTikTokPixel === 'function') {
+                    loadTikTokPixel();
+                }
+                if (banner) {
+                    banner.style.display = 'none'; // Verstecke das Banner sofort
+                }
+            } else {
+                // Wenn keine Zustimmung, zeige das Banner an (mit Animation).
+                if (banner) {
+                    setTimeout(() => {
+                        banner.classList.remove('translate-y-full');
+                    }, 1000); // Verzögerung, um die CSS-Animation zu starten
+                }
+            }
+        });
+
+
+        // --- VIDEO MODAL LOGIC ---
         function openVideo() { document.getElementById('videoModal').classList.remove('hidden'); document.getElementById('videoModal').classList.add('flex'); setTimeout(()=>document.getElementById('videoModal').classList.add('opacity-100'),10); document.getElementById('featureVideo').play().catch(()=>{}); }
         function closeVideo() { document.getElementById('videoModal').classList.remove('opacity-100'); setTimeout(()=>{document.getElementById('videoModal').classList.add('hidden');document.getElementById('videoModal').classList.remove('flex');document.getElementById('featureVideo').pause();},300); }
     </script>
